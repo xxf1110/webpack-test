@@ -14,7 +14,7 @@ module.exports = smp.wrap(
                 DEV: JSON.stringify('production'), //字符串
                 FLAG: 'false' //FLAG 是个布尔类型
             }),
-            new BundleAnalyzerPlugin(),
+            // new BundleAnalyzerPlugin(),
         ]
     })
 )

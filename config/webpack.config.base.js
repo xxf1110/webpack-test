@@ -10,6 +10,8 @@ const OptimizeCssPlugin = require('optimize-css-assets-webpack-plugin');
 const apiMocker = require('mocker-api');
 const Happypack = require('happypack'); // 多核构建 提升速度
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+
 
 module.exports = {
     mode: isDev ? "development" : "production",
@@ -78,7 +80,7 @@ module.exports = {
             },
             {
                 test: /\.(le|c)ss$/,
-                use: [  
+                use: [
                     MiniCssExtractPlugin.loader,
                     'css-loader',
                     {
@@ -205,7 +207,7 @@ module.exports = {
                     minSize: 100,
                     minChunks: 1, // 最少引入次数
                 },
-                'lottie-web': { 
+                'lottie-web': {
                     name: "lottie-web", // 单独将 react-lottie 拆包
                     priority: 5, // 权重需大于`vendor`
                     test: /[\/]node_modules[\/]lottie-web[\/]/,
@@ -227,7 +229,13 @@ module.exports = {
         // 在配置了 splitChunk 时，记得配置 runtimeChunk.
         runtimeChunk: {
             name: 'manifest'
-        }
+        }, 
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                parallel: true,
+            }),
+        ], 
     },
     devServer: {
         port: 3001,
